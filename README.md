@@ -175,3 +175,290 @@ radius-server host 10.0.0.4 auth-port 1645 key 123qwe
 
 Ответить на вопрос: были ли проблемы при выполнении пунктов 4 и 6? Если были, то как решили? Если проблем не было, то какие могли бы быть?
 Ответ на задание представить в виде вывода команды show run с R2 в файле .txt и скриншот настроек RADIUS_1 Файл назвать 9.5_ЗАДАНИЕ_2, ответ на вопрос так же можно предстваить в начале файла в свободной форме.
+
+# ОТВЕТ:
+
+Проблемы были в том, что есть отличие комманд в osi 9 и osi 15 cisco.
+
+![2](2.jpg)
+
+# Задание 3. Выполняется на R3 и RADIUS_1 и RADIUS_2.
+
+Выполнить на R3 все настройки из задания 1 и 2 (локальный пользователь и клиент серверов R3)
+Создать конфигурацию AAA с резервированием серверов RADIUS
+Проверить доступность R3 по telnet с поочередным отключением серверов 1 и 2
+Ответ на задание представить в виде вывода команды show run с R3 в файле .txt и скриншот настроек RADIUS_1 и 2
+Файл назвать 9.5_ЗАДАНИЕ_3.
+
+![3](3.jpg)
+
+R3#show running-config 
+
+Building configuration...
+
+Current configuration : 1812 bytes
+
+!
+
+version 15.1
+
+no service timestamps log datetime msec
+
+no service timestamps debug datetime msec
+
+service password-encryption
+
+!
+
+hostname R3
+
+!
+
+!
+
+!
+
+enable password 7 08204843001754
+
+!
+
+!
+
+!
+
+!
+
+!
+
+aaa new-model
+
+!
+
+aaa authentication login default group radius local 
+
+!
+
+!
+
+aaa authorization exec default group radius group radius
+
+!
+
+!
+
+!
+
+!
+
+!
+
+no ip cef
+
+no ipv6 cef
+
+!
+
+!
+
+!
+
+username admin1 privilege 15 secret 5 $1$mERr$7n6je7c9FKvO.o.40Rj1Q0
+
+!
+
+!
+
+license udi pid CISCO2901/K9 sn FTX1524P2X8-
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+ip ssh version 1
+
+no ip domain-lookup
+
+ip domain-name netology
+
+!
+
+!
+
+spanning-tree mode pvst
+
+!
+
+!
+
+!
+
+!
+
+!
+
+!
+
+interface GigabitEthernet0/0
+
+ ip address 10.255.255.3 255.255.255.0
+ 
+ duplex auto
+ 
+ speed auto
+!
+
+
+interface GigabitEthernet0/1
+
+ ip address 10.0.0.3 255.255.255.0
+ 
+ duplex auto
+ 
+ speed auto
+!
+
+
+interface FastEthernet0/2/0
+
+ switchport mode access
+ 
+ switchport nonegotiate
+!
+
+
+interface FastEthernet0/2/1
+
+ switchport mode access
+ 
+ switchport nonegotiate
+!
+
+
+interface FastEthernet0/2/2
+
+ switchport mode access
+ 
+ switchport nonegotiate
+!
+
+
+interface FastEthernet0/2/3
+
+ switchport mode access
+ 
+ switchport nonegotiate
+!
+
+
+interface FastEthernet0/3/0
+
+ switchport mode access
+ 
+ switchport nonegotiate
+!
+
+
+interface FastEthernet0/3/1
+
+ switchport mode access
+ 
+ switchport nonegotiate
+!
+
+
+interface FastEthernet0/3/2
+
+ switchport mode access
+ 
+ switchport nonegotiate
+!
+
+
+interface FastEthernet0/3/3
+
+ switchport mode access
+ 
+ switchport nonegotiate
+!
+
+interface Vlan1
+
+ no ip address
+ 
+ shutdown
+!
+
+
+ip classless
+
+!
+
+ip flow-export version 9
+
+!
+
+!
+
+!
+!
+
+radius server RADIUS_1
+
+ address ipv4 10.0.0.4 auth-port 1654
+ 
+ key 123qwe
+
+radius server 10.0.0.4
+
+ address ipv4 10.0.0.4 auth-port 1645
+ 
+ key 123qwe
+
+!
+
+!
+
+!
+
+line con 0
+
+!
+
+line aux 0
+
+!
+
+line vty 0 4
+
+ 
+ password 7 08204843001754
+ 
+ transport input telnet
+
+line vty 5 15
+
+ password 7 08204843001754
+ 
+ transport input telnet
+!
+
+
+!
+
+!
+
+end
